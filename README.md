@@ -1,0 +1,2 @@
+# TreasureHuntingGame
+DaSE数据库Project-寻宝游戏，基于MongoDB文档数据库和DjangoWeb框架的一款Web应用
