@@ -1,0 +1,75 @@
+{% extends 'game_template.html' %}
+
+{% block headerfixed %}
+<header id="header" class="fixed-top">
+{% endblock %}
+
+{% block headertitle %}
+<h1 class="logo mr-auto"><a href="/index">寻宝</a></h1>
+{% endblock %}
+
+{% block hero %}
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center justify-content-center">
+    <div class="container position-relative">
+      <h1>寻宝</h1>
+      <h2>您可以通过点击以下按钮进行寻宝</h2>
+
+      <a href="/hunt/?times=1" id="hunt1" class="btn-get-started scrollto">寻宝一次</a>
+      <script>
+        document.getElementById("hunt1").onclick = function(){ 
+          var timestamp=new Date().getTime();
+          window.location.href="/hunt/?times=1&"+timestamp+"#services"; 
+        }
+      </script>
+
+      <!-- <a href="/hunt/?times=10" id="hunt10" class="btn-get-started scrollto">寻宝十次</a>
+      <script>
+        document.getElementById("hunt10").onclick = function(){ 
+          var timestamp=new Date().getTime();
+          window.location.href="/hunt/?times=10"+timestamp+"#services"; 
+        }
+      </script> -->
+    </div>
+  </section><!-- End Hero -->
+
+{% endblock %}
+
+{% block mainbody %}
+
+{% if items is not None %}
+
+  <!-- ========= Main Body ========== -->
+  <main id="main">
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>恭喜您获得以下宝物</h2>
+          <p>您可通过点击每张图片下文字进入具体信息页进行具体操作</p>
+        </div>
+
+        <div class="row">
+        {% for item in items %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="icon-box iconbox-teal">
+                    <div class="icon">
+                        <i class="bx bxl-angular"></i>
+                    </div>
+                <h4><a href="?item={{ item.iid }}/">{{ item.name }}</a></h4>
+                <p>星级: {{ item.grade }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+      </div>
+    </section><!-- End Services Section -->
+
+  </main><!-- End #main -->
+
+{% endif %}
+
+{% endblock %}

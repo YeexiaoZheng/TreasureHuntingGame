@@ -1,0 +1,39 @@
+{% extends 'game_template.html' %}
+
+{% block headerfixed %}
+<header id="header" class="fixed-top">
+{% endblock %}
+
+{% block headertitle %}
+<h1 class="logo mr-auto"><a href="/index">工作</a></h1>
+{% endblock %}
+
+{% block hero %}
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center justify-content-center">
+    <div class="container position-relative">
+      <h1>工作</h1>
+      <h2>您可以通过点击以下按钮进行工作</h2>
+
+      <a href="/work/?work=1" id="work" class="btn-get-started scrollto">工作</a>
+      <script>
+        document.getElementById("work").onclick = function(){ 
+          var timestamp=new Date().getTime();
+          window.location.href="/work/?work=1&"+timestamp+"#counts";
+          // $.get('',{},function(res){})
+        }
+      </script>
+
+      <!-- <a href="/hunt/?times=10" id="hunt10" class="btn-get-started scrollto">寻宝十次</a>
+      <script>
+        document.getElementById("hunt10").onclick = function(){ window.location.href="/hunt/?times=10#services" }
+      </script> -->
+    </div>
+  </section><!-- End Hero -->
+
+{% endblock %}
+
+{% block mainbody %}
+
+{% endblock %}

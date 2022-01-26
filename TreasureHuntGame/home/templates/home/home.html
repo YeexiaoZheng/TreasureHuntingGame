@@ -1,0 +1,226 @@
+{% extends 'game_template.html' %}
+
+{% block mainbody %}
+
+<!-- ========= Main Body ========== -->
+<main id="main">
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+        <div class="container">
+
+            {% if finish == 1 %}
+            <div class="section-title">
+                <h4 style="color: red;"> 您已通关！ </h4>
+            </div>
+            {% endif %}
+
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="icon-box iconbox-teal" style="padding: 50px 10px 50px 10px;">
+                        <div class="icon" id="my">
+                            <i class="bx bxl-angular"></i>
+                        </div>
+                        <script>
+                            document.getElementById("my").onclick = function () {
+                                window.location.href = "/home/my/";
+                            }
+                        </script>
+                        <h4><a href="/home/my/">个人</a></h4>
+                        <b>您可以进入自己的个人界面</b>
+                        <p>个人界面可以查看佩戴与背包</p>
+                        <p>点击宝物可以佩戴/取下/丢弃</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="icon-box iconbox-blue" style="padding: 50px 10px 50px 10px;">
+                        <div class="icon" id="m">
+                            <i class="bx bxl-dribbble"></i>
+                        </div>
+                        <script>
+                            document.getElementById("m").onclick = function () {
+                                window.location.href = "/market/";
+                            }
+                        </script>
+                        <h4><a href="/market/">商城</a></h4>
+                        <b>您可以在商城购买或出售宝物</b>
+                        <p>宝物请点击详情购买/出售</p>
+                        <p>佩戴中的宝物无法出售</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="icon-box iconbox-orange" style="padding: 50px 10px 50px 10px;">
+                        <div class="icon" onclick="work()">
+                            <i class="bx bx-file"></i>
+                        </div>
+                        <h4><a id="work" href="#" onclick="work()">工作</a></h4>
+                        <script>
+                            function work() {
+                                $.ajax({
+                                    url: '/work/',
+                                    type: 'POST',
+                                    data: {
+                                        'work': 'once',
+                                    },
+                                    success: function (data) {
+                                        if (data.error != undefined) {
+                                            alert(data.error)
+                                        } else {
+                                            location.reload();
+                                        }
+                                    }
+                                });
+                            }
+                        </script>
+                        <b>您可以通过工作来赚取金币</b>
+                        <p>每次会收获(10*工作效率)枚金币</p>
+                        <p>您还可以通过右上角设置自动工作</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="icon-box iconbox-pink" style="padding: 50px 10px 50px 10px;">
+                        <div class="icon" onclick="hunt(1)">
+                            <i class="bx bx-tachometer"></i>
+                        </div>
+                        <h4><a id="hunt" href="#" onclick="hunt(1)">寻宝</a></h4>
+                        <script type="text/javascript">
+                            function hunt(times) {
+                                $.ajax({
+                                    url: '/hunt/',
+                                    type: 'POST',
+                                    data: {
+                                        'times': times,
+                                    },
+                                    success: function (data) {
+                                        if (data.error != undefined) {
+                                            alert(data.error)
+                                        } else {
+                                            showModal(data);
+                                        }
+                                    }
+                                });
+                            }
+
+                            function showModal(data) {
+                                if (data.error != undefined) {
+                                    alert(data.error)
+                                } else {
+                                    $("#name").html(
+                                        "<h3> 宝物名称:</h3><br><h2><b style='color: cyan;'>" + data.items[0].name +
+                                        "</b></h2>"
+                                    );
+                                    $("#grade").html(
+                                        '<h4> 星级: <b style="color: red;" id="grade">' + data.items[0].grade +
+                                        '</b> </h4>'
+                                    );
+                                    $("#attribute").html(
+                                        '<h5> 功能: 工作效率<b style="color: gold;" id="we">+' + data.items[0]
+                                        .work_efficiency + ' </b> | 幸运值<b style="color: gold;" id="iv">+' + data
+                                        .items[0].lucky_value + ' </b> </h5>'
+                                    );
+                                    $("#info").html(
+                                        '<p> 介绍：' + data.items[0].info + ' </p>'
+                                    );
+                                    $("#Modal").modal('show');
+                                }
+                            }
+                        </script>
+                        <b>您可以通过寻宝来获取宝物</b>
+                        <p>每次寻宝消耗10枚金币</p>
+                        <p>寻得宝物等级与幸运值相关</p>
+                    </div>
+
+                    <!-- 宝物模态框（Modal） -->
+
+                    <style>
+                        .modal {
+                            left: 50%;
+                            top: 55%;
+                            transform: translate(-50%, -50%);
+                            min-width: 70%;
+                            /*这个比例可以自己按需调节*/
+                            overflow: visible;
+                            bottom: inherit;
+                            right: inherit;
+                        }
+                    </style>
+
+                    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        恭喜您获得新宝物！
+                                    </h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="text-center">
+                                        <div class="row">
+                                            <div class="col-md-12 justify-content-center">
+
+                                                <div class="text-center" id="name">
+
+                                                </div><br>
+                                                <div class="text-center" id="grade">
+
+                                                </div><br>
+
+                                                <div class="text-center" id="attribute">
+
+                                                </div><br>
+                                                <div class="text-center" id="info">
+
+                                                </div><br>
+
+                                                <div class="row justify-content-center">
+
+                                                    <div class="col-md-6">
+                                                        <button class="form-control btn btn-primary submit px-1"
+                                                            onclick="refresh()">确定</button>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <button class="form-control btn btn-primary submit px-1"
+                                                            onclick="hunt(1)">再寻一次</button>
+                                                    </div>
+
+                                                    <script type="text/javascript">
+                                                        function refresh() {
+                                                            location.reload()
+                                                        }
+                                                    </script>
+
+                                                </div>
+
+                                                <br>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    </section><!-- End Services Section -->
+
+</main><!-- End #main -->
+
+{% endblock %}

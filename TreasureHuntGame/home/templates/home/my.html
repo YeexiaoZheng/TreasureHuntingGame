@@ -1,0 +1,392 @@
+{% extends 'game_template.html' %}
+
+{% block count %}
+<style>
+  .pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+  }
+
+  .pagination>li {
+    display: inline;
+  }
+
+  .pagination>li>a,
+  .pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+
+  /* .pagination>li>active {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  } */
+
+  .pagination>li:first-child>a,
+  .pagination>li:first-child>span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .pagination>li:last-child>a,
+  .pagination>li:last-child>span {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+</style>
+{% endblock %}
+
+{% block mainbody %}
+
+<!-- ========= Main Body ========== -->
+<main id="main">
+
+  <!-- ======= Services Section ======= -->
+  <section id="services" class="services">
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-4">
+
+          <div class="section-title">
+            <h2>穿戴</h2>
+          </div>
+
+          <div class="row justify-content-center">
+            {% for item in wearitems %}
+            <div class="col-md-6 col-6">
+              <div class="icon-box iconbox-teal icon">
+                <div class="icon">
+                  <i class="bx bxl-joomla"></i>
+                </div>
+                <h4><a href="#" role="button" data-toggle="modal" data-target="#item{{item.iid}}">{{ item.name }}</a>
+                </h4>
+                <p>星级: {{ item.grade }}</p>
+              </div>
+            </div>
+
+            <!-- 宝物模态框（Modal） -->
+
+            <style>
+              .modal {
+                left: 50%;
+                top: 55%;
+                transform: translate(-50%, -50%);
+                min-width: 70%;
+                /*这个比例可以自己按需调节*/
+                overflow: visible;
+                bottom: inherit;
+                right: inherit;
+              }
+            </style>
+
+            <div class="modal fade" id="item{{item.iid}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                    </button>
+                    <!-- <h4 class="modal-title text-center" id="myModalLabel">
+                    {{ item.name }}
+                  </h4> -->
+                  </div>
+                  <div class="modal-body">
+                    <div class="text-center">
+                      <div class="row">
+                        <div class="col-md-12 justify-content-center">
+
+                          <div class="text-center">
+                            <h3> 宝物名称:</h3><br>
+                            <h2><b style="color: cyan;">{{ item.name }}</b> </h2>
+                          </div><br>
+                          <div class="text-center">
+                            <h4> 星级: <b style="color: red;">{{ item.grade }}</b> </h4>
+                          </div><br>
+
+                          {% if item.state == 'onsale' %}
+                          <div class="text-center">
+                            <h4> 价格: <b style="color: goldenrod;">{{ item.price }}</b> </h4>
+                          </div><br>
+                          {% endif %}
+
+                          <div class="text-center">
+                            <h5> 功能: 工作效率<b style="color: gold;">+{{ item.work_efficiency }}</b> |
+                              幸运值<b style="color: gold;">+{{ item.lucky_value }}</b> </h5>
+                          </div><br>
+                          <div class="text-center">
+                            <p> 介绍：{{ item.info }}</p>
+                          </div><br>
+
+                          <div class="row justify-content-center">
+
+                            <div class="col-md-6">
+                              <button class="form-control btn btn-primary submit px-1"
+                                onclick="backpack('{{item.iid}}')">取下</button>
+                            </div>
+
+                          </div>
+
+                          <br>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+              </div>
+            </div>
+
+            {% endfor %}
+          </div>
+
+        </div>
+
+        <div class="col-md-8">
+          <div class="section-title">
+            <h2>背包</h2>
+          </div>
+
+          <div class="row">
+            {% for item in backpackitems %}
+            <div class="col-md-3 col-6">
+              <div class="icon-box iconbox-teal">
+                <div class="icon">
+                  <i class="bx bxl-joomla"></i>
+                </div>
+
+                <h5><a href="#" role="button" data-toggle="modal" data-target="#item{{item.iid}}">{{ item.name }}</a>
+                </h5>
+
+                {% if item.state == 'onsale' %}
+                <h6 style="color: gold;">正在挂牌</h6>
+                {% endif %}
+
+                <p>星级: {{ item.grade }}</p>
+
+                {% if item.state == 'backpack' %}
+                <button class="btn btn-defalut btn-sm" style="color: red;"
+                  onclick="discard('{{ item.iid }}');">丢弃</button>
+                {% endif %}
+
+
+
+              </div>
+            </div>
+
+
+            <!-- 宝物模态框（Modal） -->
+
+            <style>
+              .modal {
+                left: 50%;
+                top: 55%;
+                transform: translate(-50%, -50%);
+                min-width: 70%;
+                /*这个比例可以自己按需调节*/
+                overflow: visible;
+                bottom: inherit;
+                right: inherit;
+              }
+            </style>
+
+            <div class="modal fade" id="item{{item.iid}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                    </button>
+                    <!-- <h4 class="modal-title text-center" id="myModalLabel">
+                      {{ item.name }}
+                    </h4> -->
+                  </div>
+                  <div class="modal-body">
+                    <div class="text-center">
+                      <div class="row">
+                        <div class="col-md-12 justify-content-center">
+
+                          <div class="text-center">
+                            <h3> 宝物名称:</h3><br>
+                            <h2><b style="color: cyan;">{{ item.name }}</b> </h2>
+                          </div><br>
+                          <div class="text-center">
+                            <h4> 星级: <b style="color: red;">{{ item.grade }}</b> </h4>
+                          </div><br>
+
+                          {% if item.state == 'onsale' %}
+                          <div class="text-center">
+                            <h4> 价格: <b style="color: goldenrod;">{{ item.price }}</b> </h4>
+                          </div><br>
+                          {% endif %}
+
+                          <div class="text-center">
+                            <h5> 功能: 工作效率<b style="color: gold;">+{{ item.work_efficiency }}</b> |
+                              幸运值<b style="color: gold;">+{{ item.lucky_value }}</b> </h5>
+                          </div><br>
+                          <div class="text-center">
+                            <p> 介绍：{{ item.info }}</p>
+                          </div><br>
+
+                          <div class="row justify-content-center">
+                            {% if item.state == 'backpack' %}
+                            <div class="col-md-6">
+                              <button class="form-control bweartn btn-primary submit px-1"
+                                onclick="wear('{{item.iid}}')">佩戴</button>
+                            </div>
+
+                            <div class="col-md-6">
+                              <button class="form-control btn btn-primary submit px-1"
+                                onclick="discard('{{item.iid}}')">丢弃</button>
+                            </div>
+                            {% endif %}
+
+                            {% if item.state == 'onsale' %}
+                            <div class="col-md-6">
+                              <button class="form-control btn btn-success submit px-1"
+                                onclick="retrieve('{{item.iid}}')">回收</button>
+                            </div>
+                            {% endif %}
+                          </div>
+
+                          <br>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+              </div>
+            </div>
+
+
+            {% endfor %}
+
+          </div>
+
+          <div class="text-center">
+            <ul class="pagination justify-content-center">
+              {% if backpackitems.has_previous %}
+              <li><a href="/home/my/?page={{ backpackitems.previous_page_number }}">&lt;</a></li>
+              {% endif %}
+              {% for i in page_range %}
+              {% if i == backpackitems.number %}
+              <li>
+                <a><b style="color: red;">{{ i }}</b></a>
+              </li>
+              {% else %}
+              <li><a href="/home/my/?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+              {% endfor %}
+              {% if backpackitems.has_next %}
+              <li><a href="/home/my/?page={{ backpackitems.next_page_number }}">&gt;</a></li>
+              {% endif %}
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <script type="text/javascript">
+      function wear(iid) {
+        $.ajax({
+          url: '/home/my/',
+          type: 'POST',
+          data: {
+            'f': 'wear',
+            'iid': iid,
+          },
+          success: function (data) {
+            if (data.error != undefined) {
+              alert(data.error)
+            } else {
+              location.reload();
+            }
+          }
+        });
+      }
+
+      function backpack(iid) {
+        $.ajax({
+          url: '/home/my/',
+          type: 'POST',
+          data: {
+            'f': 'backpack',
+            'iid': iid,
+          },
+          success: function (data) {
+            if (data.error != undefined) {
+              alert(data.error)
+            } else {
+              location.reload();
+            }
+          }
+        });
+      }
+
+      function discard(iid) {
+        $.ajax({
+          url: '/home/my/',
+          type: 'POST',
+          data: {
+            'f': 'discard',
+            'iid': iid,
+          },
+          success: function (data) {
+            if (data.error != undefined) {
+              alert(data.error)
+            } else {
+              location.reload();
+            }
+          }
+        });
+      }
+
+      function retrieve(iid) {
+        $.ajax({
+          url: '/market/',
+          type: 'POST',
+          data: {
+            'f': 'retrieve',
+            'iid': iid,
+          },
+          success: function (data) {
+            if (data.error != undefined) {
+              alert(data.error)
+            } else {
+              location.reload();
+            }
+          }
+        });
+      }
+    </script>
+
+
+  </section><!-- End Services Section -->
+
+</main><!-- End #main -->
+
+{% endblock %}
